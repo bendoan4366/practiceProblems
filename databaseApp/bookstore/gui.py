@@ -1,25 +1,26 @@
 from tkinter import *
-import books_db
+from books_db import booksDatabase
 
 #functions
 
+database=booksDatabase()
 
 def view_command():
     listbox1.delete(0,END)
-    for row in books_db.view():
+    for row in database.view():
         listbox1.insert(END, row)
 
 def search_command():
     listbox1.delete(0,END)
-    for row in books_db.search(title = title_text.get(), author = author_text.get(), year = year_text.get(), isbn=ISBN_text.get()):
+    for row in database.search(title = title_text.get(), author = author_text.get(), year = year_text.get(), isbn=ISBN_text.get()):
         listbox1.insert(END, row)
 
 def add_command():
-    books_db.insert(title = title_text.get(), author = author_text.get(), year = year_text.get(), isbn=ISBN_text.get())
+    database.insert(title = title_text.get(), author = author_text.get(), year = year_text.get(), isbn=ISBN_text.get())
     view_command()
 
 def delete_command():
-    books_db.delete(selected_row[0])
+    database.delete(selected_row[0])
     view_command()
 
 def get_selected_row(event):
@@ -38,7 +39,7 @@ def get_selected_row(event):
 
 
 def update_command():
-    books_db.update(selected_row[0], title = title_text.get(), author = author_text.get(), year = year_text.get(), isbn=ISBN_text.get())
+    database.update(selected_row[0], title = title_text.get(), author = author_text.get(), year = year_text.get(), isbn=ISBN_text.get())
     view_command()
 
 
