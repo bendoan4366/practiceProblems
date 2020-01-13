@@ -22,7 +22,7 @@ while True:
     cnts, hierarchy = cv2.findContours(threshold.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     for contour in cnts:
-        if cv2.contourArea(contour) > 1000:
+        if cv2.contourArea(contour) > 10000:
             continue
         else:
             (x,y,w,h) = cv2.boundingRect(contour)
