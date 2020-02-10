@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func
 from emailScript import send_email
 
 
@@ -37,7 +38,6 @@ def success():
         user_email = request.form["email"]
         user_name = request.form["name"]
         user_height = request.form["message"]
-        send_email(user_email, user_height)
         # print(request.form)
         # print("UN: " + user_name + " //Email: " + email + " //Height: " + str(user_height))
 
@@ -46,10 +46,20 @@ def success():
             data = Data(user_email, user_height)
             db.session.add(data)
             db.session.commit()
+            average_height = db.session.query(func.avg(Data.height_)).scalar()
+            count = db.session.query(Data.height_).count()
+            
+            send_email(user_email, user_height, average_height, count)
+
             return render_template("success.html")
         else: 
             db.session.query(Data).filter(Data.email_==user_email).update({Data.height_:user_height})
             db.session.commit()
+            average_height = db.session.query(func.avg(Data.height_)).scalar()
+            count = db.session.query(Data.height_).count()
+            
+            send_email(user_email, user_height, average_height, count)
+
 
     return(render_template('home.html', text = "You already entered that email bruh"))
 
